@@ -1,0 +1,20 @@
+{
+  "name": "sonatlas",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "test": "node --test 'test/*.test.ts'"
+  },
+  "dependencies": {
+    "@nuxt/fonts": "^0.14.0",
+    "@supabase/supabase-js": "^2.112.3",
+    "nuxt": "^4.5.2",
+    "vue": "^3.5.41",
+    "vue-router": "^5.2.0"
+  }
+}
