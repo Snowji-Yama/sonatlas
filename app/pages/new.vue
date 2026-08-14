@@ -157,7 +157,7 @@ async function submit() {
 <style scoped>
 .screen {
   min-height: 100dvh;
-  max-width: 560px;
+  max-width: var(--col);
   margin: 0 auto;
   padding: calc(var(--top) + var(--pad)) var(--pad) calc(var(--bottom) + var(--pad));
   display: flex;

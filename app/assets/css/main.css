@@ -10,6 +10,8 @@
   --display: 'Space Grotesk', system-ui, sans-serif;
   --mono: 'Space Mono', ui-monospace, monospace;
 
+  /* largeur de la colonne de contenu, partagée par les écrans et la roue de fond */
+  --col: 560px;
   --pad: 1.1rem;
   --top: env(safe-area-inset-top);
   --bottom: env(safe-area-inset-bottom);

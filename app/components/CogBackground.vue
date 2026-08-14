@@ -15,11 +15,15 @@
 
 <style scoped>
 .cog {
-  /* décalée d'une demi-largeur : le moyeu tombe pile dans le coin bas-droit */
   --size: min(155vw, 900px);
   position: fixed;
   z-index: -1;
-  right: calc(var(--size) / -2);
+  /* Le moyeu se cale sur le coin bas-droit de la colonne de contenu, pas de la
+     fenêtre : sur desktop la colonne est centrée et la roue paraîtrait sinon
+     détachée, collée au bord de l'écran. `50%` vaut la moitié du viewport, le
+     `min()` fait retomber le décalage à zéro dès que l'écran est plus étroit
+     que la colonne. */
+  right: calc(50% - min(var(--col) / 2, 50%) - var(--size) / 2);
   bottom: calc(var(--size) / -2);
   width: var(--size);
   height: auto;

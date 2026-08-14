@@ -115,7 +115,7 @@ const pad = (n: number) => String(n).padStart(3, '0')
 <style scoped>
 .screen {
   min-height: 100dvh;
-  max-width: 560px;
+  max-width: var(--col);
   margin: 0 auto;
   /* le padding haut vit dans .pinned, sinon la liste défile dans la marge */
   padding: 0 var(--pad) calc(var(--bottom) + 5rem);
@@ -286,5 +286,5 @@ const pad = (n: number) => String(n).padStart(3, '0')
   padding: 1.6rem var(--pad) calc(var(--bottom) + .9rem);
   background: linear-gradient(to bottom, transparent, var(--paper) 45%);
 }
-.dock .btn { max-width: calc(560px - 2 * var(--pad)); margin: 0 auto; }
+.dock .btn { max-width: calc(var(--col) - 2 * var(--pad)); margin: 0 auto; }
 </style>

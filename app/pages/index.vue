@@ -100,7 +100,7 @@ const serial = computed(() =>
    schéma qui absorbe la place restante — voir `.drawing`. */
 .screen {
   height: 100dvh;
-  max-width: 560px;
+  max-width: var(--col);
   margin: 0 auto;
   padding: calc(var(--top) + var(--pad)) var(--pad) calc(var(--bottom) + var(--pad));
   display: flex;
