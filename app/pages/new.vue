@@ -3,7 +3,7 @@ import { GENRES, GENRE_NAMES } from '~/constants/genres'
 
 const { session, ready, sendLink, signOut, enabled } = useAuth()
 const demo = usingMocks()
-/** Écran de connexion tant que Supabase est branché et qu'on n'est pas identifié. */
+/** Sign-in screen as long as Supabase is wired up and we are not signed in. */
 const locked = computed(() => enabled && ready.value && !session.value)
 
 const email = ref('')
@@ -14,7 +14,7 @@ const authError = ref('')
 async function requestLink() {
   const trimmed = email.value.trim()
   if (!trimmed) {
-    authError.value = 'Renseigne ton adresse.'
+    authError.value = 'Enter your email address.'
     return
   }
   sending.value = true
@@ -46,7 +46,7 @@ function toggle(s: string) {
 async function submit() {
   const trimmed = name.value.trim()
   if (!trimmed || !genre.value) {
-    error.value = 'Nom et genre principal sont obligatoires.'
+    error.value = 'Name and main genre are required.'
     return
   }
   saving.value = true
@@ -69,61 +69,61 @@ async function submit() {
 
     <div class="bar">
       <NuxtLink to="/artists" class="meta back">← Collection</NuxtLink>
-      <span v-if="demo" class="meta face">Démo</span>
+      <span v-if="demo" class="meta face">Demo</span>
       <span class="meta">
-        Piste 01
+        Track 01
         <span class="face">Face B</span>
       </span>
     </div>
     <div class="rule-reel"><div class="rule" /></div>
 
     <header class="head">
-      <h1>{{ locked ? 'Accès réservé' : 'Nouvel enregistrement' }}</h1>
+      <h1>{{ locked ? 'Restricted access' : 'New recording' }}</h1>
     </header>
 
-    <p v-if="enabled && !ready" class="hint meta">Vérification de la session…</p>
+    <p v-if="enabled && !ready" class="hint meta">Checking session…</p>
 
-    <!-- ── connexion ── -->
+    <!-- ── sign in ── -->
     <form v-else-if="locked" class="form" novalidate @submit.prevent="requestLink">
       <p class="hint meta">
-        L'écriture est réservée au titulaire de la collection. Un lien de connexion
-        à usage unique sera envoyé par e-mail.
+        Writing is reserved for the owner of the collection. A single-use sign-in
+        link will be sent by email.
       </p>
 
       <label class="field">
-        <span class="meta">01 — Adresse e-mail</span>
-        <input v-model="email" type="email" required autocomplete="email" placeholder="toi@exemple.fr">
+        <span class="meta">01 — Email address</span>
+        <input v-model="email" type="email" required autocomplete="email" placeholder="you@example.com">
       </label>
 
       <p v-if="sent" class="sent meta" role="status">
-        Lien envoyé à {{ email }}. Ouvre-le depuis cet appareil.
+        Link sent to {{ email }}. Open it from this device.
       </p>
       <p v-if="authError" class="error meta" role="alert">⚠ {{ authError }}</p>
 
       <button type="submit" class="btn accent" :disabled="sending">
-        <span>{{ sending ? 'Envoi…' : 'Recevoir le lien' }}</span>
+        <span>{{ sending ? 'Sending…' : 'Get the link' }}</span>
         <span aria-hidden="true">→</span>
       </button>
     </form>
 
-    <!-- ── ajout ── -->
+    <!-- ── add ── -->
     <form v-else class="form" novalidate @submit.prevent="submit">
       <label class="field">
-        <span class="meta">01 — Artiste</span>
-        <input v-model="name" type="text" required autocapitalize="words" placeholder="Nom du groupe">
+        <span class="meta">01 — Artist</span>
+        <input v-model="name" type="text" required autocapitalize="words" placeholder="Band name">
       </label>
 
       <label class="field">
-        <span class="meta">02 — Genre principal</span>
+        <span class="meta">02 — Main genre</span>
         <select v-model="genre" required>
-          <option value="" disabled>Choisir</option>
+          <option value="" disabled>Choose</option>
           <option v-for="g in GENRE_NAMES" :key="g" :value="g">{{ g }}</option>
         </select>
       </label>
 
       <div class="field">
-        <span class="meta">03 — Sous-genres<template v-if="subgenres.length"> ({{ subgenres.length }})</template></span>
-        <p v-if="!options.length" class="hint meta">En attente du genre principal</p>
+        <span class="meta">03 — Subgenres<template v-if="subgenres.length"> ({{ subgenres.length }})</template></span>
+        <p v-if="!options.length" class="hint meta">Waiting for the main genre</p>
         <div v-else class="chips">
           <button
             v-for="s in options"
@@ -140,7 +140,7 @@ async function submit() {
       <p v-if="error" class="error meta" role="alert">⚠ {{ error }}</p>
 
       <button type="submit" class="btn accent" :disabled="saving">
-        <span>{{ saving ? 'Enregistrement…' : 'Enregistrer' }}</span>
+        <span>{{ saving ? 'Saving…' : 'Record' }}</span>
         <span aria-hidden="true">●</span>
       </button>
     </form>
@@ -148,7 +148,7 @@ async function submit() {
     <div class="rule-reel"><div class="rule" /></div>
     <div class="bar">
       <span class="meta">Type A — normal</span>
-      <button v-if="session" class="meta signout" @click="signOut">Déconnexion</button>
+      <button v-if="session" class="meta signout" @click="signOut">Sign out</button>
       <span class="meta">Stereo on</span>
     </div>
   </main>
@@ -176,7 +176,6 @@ async function submit() {
   text-transform: uppercase;
 }
 
-/* ── formulaire : une fiche technique ── */
 .form {
   flex: 1;
   display: flex;

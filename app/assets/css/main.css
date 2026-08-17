@@ -1,4 +1,4 @@
-/* ── SONATLAS ── papier gris grainé, encre noire, un accent ──────────────── */
+/* ── SONATLAS ── grainy grey paper, black ink, one accent ────────────────── */
 
 :root {
   --paper: #d9d8d3;
@@ -10,7 +10,7 @@
   --display: 'Space Grotesk', system-ui, sans-serif;
   --mono: 'Space Mono', ui-monospace, monospace;
 
-  /* largeur de la colonne de contenu, partagée par les écrans et la roue de fond */
+  /* content column width, shared by the screens and the background wheel */
   --col: 560px;
   --pad: 1.1rem;
   --top: env(safe-area-inset-top);
@@ -25,8 +25,8 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Pas de `background` ici : html le porte déjà et le propage au canvas. En
-   remettre un sur body repeindrait par-dessus les fonds en z-index négatif. */
+/* No `background` here: html already carries it and propagates it to the canvas.
+   Setting one on body again would paint over the negative z-index backgrounds. */
 body {
   min-height: 100dvh;
   font-family: var(--mono);
@@ -34,7 +34,7 @@ body {
   overscroll-behavior-y: none;
 }
 
-/* Grain : une seule couche fixe au-dessus de tout, non cliquable. */
+/* Grain: a single fixed layer above everything, not clickable. */
 body::after {
   content: '';
   position: fixed;
@@ -53,7 +53,7 @@ svg { display: block; }
 
 /* ── primitives ──────────────────────────────────────────────────────────── */
 
-/* toute la métadonnée technique : coins, libellés de champ, annotations */
+/* all the technical metadata: corners, field labels, annotations */
 .meta {
   font-family: var(--mono);
   font-size: .58rem;
@@ -64,7 +64,7 @@ svg { display: block; }
 
 .rule { height: 1px; background: var(--ink); opacity: .55; }
 
-/* filet à embouts de bobine, façon amorce de bande */
+/* rule with reel-end caps, like a tape leader */
 .rule-reel {
   display: flex;
   align-items: center;
@@ -80,10 +80,10 @@ svg { display: block; }
 }
 .rule-reel > .rule { flex: 1; }
 
-/* bandeau de métadonnées, en haut et en bas de chaque écran */
+/* metadata band, at the top and bottom of every screen */
 .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 
-/* retour : encadré, sinon il se perd au milieu de la métadonnée grise */
+/* back link: boxed, otherwise it gets lost among the grey metadata */
 .back {
   display: inline-flex;
   align-items: center;
@@ -104,7 +104,7 @@ svg { display: block; }
   margin-left: .3em;
 }
 
-/* bouton à coins coupés — la seule forme pleine de la charte */
+/* cut-corner button — the only solid shape in the design language */
 .btn {
   --cut: 9px;
   display: flex;
@@ -131,9 +131,9 @@ svg { display: block; }
 
 /* ── rotation ────────────────────────────────────────────────────────────── */
 
-/* Paliers irréguliers mais strictement croissants : la vitesse angulaire varie
-   sans jamais repartir en arrière — c'est le pleurage d'un vrai défilement.
-   Partagée par les moyeux de l'accueil et la roue de fond de la collection. */
+/* Uneven but strictly increasing steps: the angular speed varies without ever
+   going backwards — the wow and flutter of a real tape transport.
+   Shared by the home hubs and the collection's background wheel. */
 @keyframes spin {
   0%   { transform: rotate(0deg); }
   17%  { transform: rotate(58deg); }

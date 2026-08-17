@@ -4,9 +4,9 @@ import { ALL_SUBGENRES, GENRES, GENRE_NAMES } from '~/constants/genres'
 const { data: artists, pending, error } = useArtists()
 const demo = usingMocks()
 
-// ponytail: useState survit à la navigation vers /new et retour, et meurt avec
-// l'onglet — ce qui est le comportement demandé. Il repart aussi à zéro sur un
-// rechargement complet ; si ça gêne, passer ces trois lignes en sessionStorage.
+// ponytail: useState survives navigating to /new and back, and dies with the
+// tab — which is the behaviour we want. It also resets on a full reload; if
+// that ever bites, move these three lines to sessionStorage.
 const genre = useState('filter:genre', () => '')
 const subgenre = useState('filter:subgenre', () => '')
 const asc = useState('filter:asc', () => true)
@@ -17,14 +17,14 @@ function resetFilters() {
   subgenre.value = ''
 }
 
-// Le sélecteur de sous-genre se restreint au genre choisi.
+// The subgenre picker narrows down to the selected genre.
 const subgenreOptions = computed(() => (genre.value ? GENRES[genre.value] ?? [] : ALL_SUBGENRES))
 watch(genre, () => {
   if (subgenre.value && !subgenreOptions.value.includes(subgenre.value)) subgenre.value = ''
 })
 
-// Changer un filtre ou le tri renvoie en haut de liste : sinon on se retrouve
-// au milieu d'un classement qui n'a plus rien à voir.
+// Changing a filter or the sort scrolls back to the top: otherwise you land in
+// the middle of a ranking that no longer has anything to do with the list.
 watch([genre, subgenre, asc], () => window.scrollTo({ top: 0 }))
 
 const visible = computed(() =>
@@ -45,7 +45,7 @@ const pad = (n: number) => String(n).padStart(3, '0')
     <div class="pinned">
       <div class="bar">
         <NuxtLink to="/" class="meta back">← Index</NuxtLink>
-        <span v-if="demo" class="meta face">Démo</span>
+        <span v-if="demo" class="meta face">Demo</span>
         <span class="meta">
           {{ pad(visible.length) }} / {{ pad(artists?.length ?? 0) }}
           <span class="face">Face A</span>
@@ -55,7 +55,7 @@ const pad = (n: number) => String(n).padStart(3, '0')
 
       <header class="head">
         <h1>Collection</h1>
-        <button class="sort meta" :aria-label="`Trier ${asc ? 'de Z à A' : 'de A à Z'}`" @click="asc = !asc">
+        <button class="sort meta" :aria-label="`Sort ${asc ? 'Z to A' : 'A to Z'}`" @click="asc = !asc">
           {{ asc ? 'A→Z' : 'Z→A' }}
         </button>
       </header>
@@ -64,22 +64,22 @@ const pad = (n: number) => String(n).padStart(3, '0')
         <label class="field">
           <span class="meta">Genre</span>
           <select v-model="genre">
-            <option value="">Tous</option>
+            <option value="">All</option>
             <option v-for="g in GENRE_NAMES" :key="g" :value="g">{{ g }}</option>
           </select>
         </label>
         <label class="field">
-          <span class="meta">Sous-genre</span>
+          <span class="meta">Subgenre</span>
           <select v-model="subgenre">
-            <option value="">Tous</option>
+            <option value="">All</option>
             <option v-for="s in subgenreOptions" :key="s" :value="s">{{ s }}</option>
           </select>
         </label>
         <button
           class="eject"
           :disabled="!hasFilters"
-          title="Réinitialiser les filtres"
-          aria-label="Réinitialiser les filtres"
+          title="Reset filters"
+          aria-label="Reset filters"
           @click="resetFilters"
         >
           <span class="glyph-eject" aria-hidden="true" />
@@ -87,9 +87,9 @@ const pad = (n: number) => String(n).padStart(3, '0')
       </div>
     </div>
 
-    <p v-if="pending" class="note meta">Lecture de la bande…</p>
+    <p v-if="pending" class="note meta">Reading the tape…</p>
     <p v-else-if="error" class="note err">{{ error.message }}</p>
-    <p v-else-if="!visible.length" class="note meta">Bande vierge — aucun résultat</p>
+    <p v-else-if="!visible.length" class="note meta">Blank tape — no results</p>
 
     <ol v-else class="list">
       <li v-for="(a, i) in visible" :key="a.id" class="row">
@@ -105,7 +105,7 @@ const pad = (n: number) => String(n).padStart(3, '0')
 
     <div class="dock">
       <NuxtLink to="/new" class="btn accent">
-        <span>Enregistrer</span>
+        <span>Record</span>
         <span aria-hidden="true">●</span>
       </NuxtLink>
     </div>
@@ -117,13 +117,13 @@ const pad = (n: number) => String(n).padStart(3, '0')
   min-height: 100dvh;
   max-width: var(--col);
   margin: 0 auto;
-  /* le padding haut vit dans .pinned, sinon la liste défile dans la marge */
+  /* the top padding lives in .pinned, otherwise the list scrolls through the margin */
   padding: 0 var(--pad) calc(var(--bottom) + 5rem);
   display: flex;
   flex-direction: column;
 }
 
-/* en-tête + filtres épinglés : toujours accessibles pendant le défilement */
+/* pinned header + filters: always reachable while scrolling */
 .pinned {
   position: sticky;
   top: 0;
@@ -143,7 +143,6 @@ const pad = (n: number) => String(n).padStart(3, '0')
   opacity: .55;
 }
 
-/* ── titre ── */
 .head {
   display: flex;
   align-items: flex-end;
@@ -171,7 +170,6 @@ const pad = (n: number) => String(n).padStart(3, '0')
 .sort:active { background: var(--accent); }
 .sort:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-/* ── filtres ── */
 .filters { display: flex; align-items: flex-end; gap: .8rem; }
 
 .field { flex: 1; min-width: 0; }
@@ -191,7 +189,6 @@ const pad = (n: number) => String(n).padStart(3, '0')
   font-size: .9rem;
   letter-spacing: -.01em;
   text-transform: uppercase;
-  /* chevron */
   background-image:
     linear-gradient(45deg, transparent 50%, var(--ink) 50%),
     linear-gradient(135deg, var(--ink) 50%, transparent 50%);
@@ -233,18 +230,17 @@ const pad = (n: number) => String(n).padStart(3, '0')
   background: var(--ink);
 }
 
-/* ── liste ── */
 .note { padding: 3rem 0; text-align: center; }
 .note.err { color: var(--accent); font-size: .8rem; }
 
 .list { list-style: none; }
 
 .row > .rule { opacity: .35; }
-/* la première ligne doublerait le filet de bas de .pinned */
+/* the first row would double the bottom rule of .pinned */
 .row:first-child > .rule { display: none; }
 
-/* index | nom            genre
-        | sous-genres           */
+/* index | name            genre
+        | subgenres            */
 .grid {
   display: grid;
   grid-template-columns: 2.4rem 1fr auto;
@@ -275,8 +271,7 @@ const pad = (n: number) => String(n).padStart(3, '0')
   text-transform: none;
 }
 
-/* ── appel à l'action ── */
-/* Fixe en bas : le dégradé fait disparaître la liste sous le bouton. */
+/* Fixed at the bottom: the gradient fades the list out under the button. */
 .dock {
   position: fixed;
   left: 0;

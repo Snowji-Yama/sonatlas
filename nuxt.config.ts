@@ -3,8 +3,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
-  // ponytail: SPA pure — pas de SEO à faire ici, et ça rend l'hébergement
-  // interchangeable (Cloudflare Pages / Vercel / n'importe quel statique).
+  // ponytail: pure SPA — no SEO to do here, and it makes hosting
+  // interchangeable (Cloudflare Pages / Vercel / any static host).
   ssr: false,
 
   modules: ['@nuxt/fonts'],

@@ -1,13 +1,13 @@
 import type { Session } from '@supabase/supabase-js'
 
-// ponytail: un seul abonnement pour toute la vie de la SPA, d'où le drapeau
-// au niveau du module plutôt qu'un plugin dédié.
+// ponytail: a single subscription for the whole life of the SPA, hence the
+// module-level flag rather than a dedicated plugin.
 let subscribed = false
 
 export function useAuth() {
   const session = useState<Session | null>('auth:session', () => null)
-  // Sans ce drapeau, l'écran d'ajout affiche la connexion pendant le temps
-  // que met getSession() à répondre, même quand on est déjà identifié.
+  // Without this flag, the add screen shows the sign-in form for as long as
+  // getSession() takes to answer, even when we are already signed in.
   const ready = useState('auth:ready', () => false)
   const client = supabase()
 
@@ -23,12 +23,12 @@ export function useAuth() {
   }
 
   /**
-   * `shouldCreateUser: false` est la ligne qui protège tout : sans elle, ce
-   * formulaire suffirait à n'importe qui pour se créer un compte et donc
-   * obtenir le droit d'écrire.
+   * `shouldCreateUser: false` is the line that protects everything: without it,
+   * this form would be enough for anyone to create an account and therefore get
+   * write access.
    */
   async function sendLink(email: string) {
-    if (!client) throw new Error('Supabase non configuré')
+    if (!client) throw new Error('Supabase not configured')
     const { error } = await client.auth.signInWithOtp({
       email,
       options: {

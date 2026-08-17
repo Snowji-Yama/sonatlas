@@ -10,19 +10,19 @@ const data = [
 ]
 const names = (o = {}) => filterArtists(data, o).map(a => a.name)
 
-test('tri alphabétique insensible aux accents et à la casse', () => {
+test('alphabetical sort, accent- and case-insensitive', () => {
   assert.deepEqual(names(), ['Aphex Twin', 'ätna', 'King Tubby', 'Sonic Youth'])
   assert.deepEqual(names({ asc: false }), ['Sonic Youth', 'King Tubby', 'ätna', 'Aphex Twin'])
 })
 
-test('filtres genre et sous-genre, cumulables', () => {
+test('genre and subgenre filters, stackable', () => {
   assert.deepEqual(names({ genre: 'ROCK' }), ['Sonic Youth'])
   assert.deepEqual(names({ subgenre: 'Dub' }), ['King Tubby'])
   assert.deepEqual(names({ genre: 'ROCK', subgenre: 'Dub' }), [])
   assert.deepEqual(names({ genre: '', subgenre: '' }).length, 4)
 })
 
-test('ne mute pas la source', () => {
+test('does not mutate the source', () => {
   filterArtists(data, { asc: false })
   assert.equal(data[0].name, 'Sonic Youth')
 })

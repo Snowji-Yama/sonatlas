@@ -2,7 +2,7 @@
 const { data: artists } = useArtists()
 const demo = usingMocks()
 
-// Numéro de série : le nombre d'artistes, sur 9 chiffres groupés par 3.
+// Serial number: the artist count, on 9 digits grouped by 3.
 const serial = computed(() =>
   String(artists.value?.length ?? 0).padStart(9, '0').replace(/(\d{3})(?=\d)/g, '$1 '),
 )
@@ -12,31 +12,31 @@ const serial = computed(() =>
   <main class="screen">
     <div class="bar">
       <span class="meta">Sonatlas</span>
-      <span v-if="demo" class="meta face">Démo</span>
+      <span v-if="demo" class="meta face">Demo</span>
       <span class="meta">Type — artist</span>
     </div>
     <div class="rule-reel"><div class="rule" /></div>
 
     <header class="hero">
       <h1>Sonatlas</h1>
-      <p class="meta sub">Collection d'artistes &amp; de genres</p>
+      <p class="meta sub">A collection of artists &amp; genres</p>
     </header>
 
-    <!-- vue éclatée de la cassette, en filets -->
-    <svg class="drawing" viewBox="0 0 340 252" role="img" aria-label="Schéma technique d'une cassette audio">
+    <!-- exploded view of the cassette, in line art -->
+    <svg class="drawing" viewBox="0 0 340 252" role="img" aria-label="Technical drawing of an audio cassette">
       <g fill="none" stroke="currentColor" stroke-width="1.2">
         <rect x="14" y="36" width="312" height="186" rx="7" />
         <rect x="24" y="46" width="292" height="166" rx="4" opacity=".35" />
 
-        <!-- fenêtre de bande -->
+        <!-- tape window -->
         <rect x="86" y="68" width="168" height="88" rx="3" />
 
-        <!-- bobines : même grammaire que la roue de fond, une couronne crantée.
-             Le translate est sur un g extérieur, sinon l'animation CSS écraserait
-             l'attribut transform de la rotation. -->
+        <!-- reels: same grammar as the background wheel, a cogged ring.
+             The translate sits on an outer g, otherwise the CSS animation would
+             overwrite the rotation's transform attribute. -->
         <g transform="translate(128 112)">
           <g class="reel">
-            <!-- jante posée sur l'arête externe des crans : 24 + 3/2 = 25.5 -->
+            <!-- rim sitting on the outer edge of the teeth: 24 + 3/2 = 25.5 -->
             <circle r="25.5" />
             <circle r="24" stroke-width="3" stroke-dasharray="3.8 4.578" opacity=".3" />
             <circle r="8" />
@@ -45,7 +45,7 @@ const serial = computed(() =>
         </g>
         <g transform="translate(212 112)">
           <g class="reel slow">
-            <!-- jante posée sur l'arête externe des crans : 24 + 3/2 = 25.5 -->
+            <!-- rim sitting on the outer edge of the teeth: 24 + 3/2 = 25.5 -->
             <circle r="25.5" />
             <circle r="24" stroke-width="3" stroke-dasharray="3.8 4.578" opacity=".3" />
             <circle r="8" />
@@ -53,19 +53,19 @@ const serial = computed(() =>
           </g>
         </g>
 
-        <!-- lucarne de tête de lecture + ergots -->
+        <!-- head window + lugs -->
         <path d="M104 166h132v34H104z" />
         <path d="M132 166v34M208 166v34" opacity=".45" />
         <circle cx="170" cy="183" r="6" />
 
-        <!-- vis -->
+        <!-- screws -->
         <circle cx="34" cy="56" r="3" /><circle cx="306" cy="56" r="3" />
         <circle cx="34" cy="202" r="3" /><circle cx="306" cy="202" r="3" />
 
-        <!-- lignes d'étiquette -->
+        <!-- label lines -->
         <path d="M40 82h34M40 92h26M40 102h34" opacity=".5" />
 
-        <!-- lignes de cote, tracées hors du corps -->
+        <!-- dimension lines, drawn outside the body -->
         <path d="M122 36v-14h-46" opacity=".7" />
         <path d="M170 222v14h64" opacity=".7" />
       </g>
@@ -73,16 +73,16 @@ const serial = computed(() =>
         <circle cx="122" cy="36" r="2.4" /><circle cx="170" cy="222" r="2.4" />
       </g>
       <text class="anno" x="72" y="25" text-anchor="end">Face A</text>
-      <text class="anno" x="240" y="239">4,76 cm/s</text>
+      <text class="anno" x="240" y="239">4.76 cm/s</text>
     </svg>
 
     <nav class="transport">
       <NuxtLink to="/artists" class="btn">
-        <span>Parcourir</span>
+        <span>Browse</span>
         <span class="glyph" aria-hidden="true">▶▶</span>
       </NuxtLink>
       <NuxtLink to="/new" class="btn accent">
-        <span>Enregistrer</span>
+        <span>Record</span>
         <span class="glyph" aria-hidden="true">●</span>
       </NuxtLink>
     </nav>
@@ -96,8 +96,8 @@ const serial = computed(() =>
 </template>
 
 <style scoped>
-/* Hauteur fixe, pas `min-height` : l'accueil ne doit jamais défiler. C'est le
-   schéma qui absorbe la place restante — voir `.drawing`. */
+/* Fixed height, not `min-height`: the home screen must never scroll. The
+   drawing is what absorbs the remaining space — see `.drawing`. */
 .screen {
   height: 100dvh;
   max-width: var(--col);
@@ -108,7 +108,7 @@ const serial = computed(() =>
   gap: .7rem;
 }
 
-/* les groupes de chiffres ne doivent pas se couper en bout de barre */
+/* digit groups must not break at the end of the bar */
 .serial { white-space: nowrap; }
 
 .hero { margin: clamp(1.5rem, 7vh, 3rem) 0 clamp(1rem, 4vh, 2rem); }
@@ -124,10 +124,9 @@ const serial = computed(() =>
 
 .sub { margin-top: .9rem; }
 
-/* ── dessin ── */
-/* `flex: 1` + `min-height: 0` : la hauteur vient de la place restante et non du
-   ratio du viewBox, donc le schéma rétrécit au lieu de pousser la page. Son
-   `preserveAspectRatio` par défaut le garde centré et proportionné dans la boîte. */
+/* `flex: 1` + `min-height: 0`: the height comes from the remaining space, not
+   from the viewBox ratio, so the drawing shrinks instead of pushing the page.
+   Its default `preserveAspectRatio` keeps it centred and proportional in the box. */
 .drawing {
   flex: 1;
   min-height: 0;
@@ -149,10 +148,9 @@ const serial = computed(() =>
   transform-origin: center;
   animation: spin 9s linear infinite;
 }
-/* durée et déphasage différents : les deux moyeux ne flottent jamais ensemble */
+/* different duration and offset: the two hubs never drift in sync */
 .reel.slow { animation-duration: 13.7s; animation-delay: -4s; }
 
-/* ── transport ── */
 .transport {
   display: flex;
   flex-direction: column;
@@ -162,9 +160,9 @@ const serial = computed(() =>
 
 .glyph { font-size: .62rem; letter-spacing: .1em; }
 
-/* Sous ~480px de haut (paysage téléphone), le schéma n'a plus de place utile :
-   il tombe à 0 et les blocs fixes débordent quand même de quelques pixels.
-   On le retire franchement et on resserre les marges plancher. */
+/* Below ~480px tall (phone landscape) the drawing has no usable room left: it
+   collapses to 0 and the fixed blocks still overflow by a few pixels.
+   So we drop it outright and tighten the floor margins. */
 @media (max-height: 480px) {
   .drawing { display: none; }
   .hero { margin: .8rem 0; }

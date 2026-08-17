@@ -14,12 +14,11 @@ npm test                      # filter + sort, node --test
 ```
 
 Genres and subgenres are hardcoded in [`genres.ts`](app/constants/genres.ts).
-Remaining work is in [TODO.md](TODO.md).
 
 ## Demo mode
 
 No `.env` → the app serves [`mockArtists.ts`](app/constants/mockArtists.ts), additions
-stay in memory, and an orange **DÉMO** chip shows in every header. Fill `.env` and
+stay in memory, and an orange **DEMO** chip shows in every header. Fill `.env` and
 everything switches to Supabase.
 
 The chip matters: without it, deploying without env vars would show fake artists
@@ -58,7 +57,7 @@ dashboard. Schedule a weekly ping (cron-job.org) if the app is rarely visited.
 ## Authentication
 
 Read is public, write is not. `/new` shows a magic-link sign-in until a session exists.
-Sessions live in `localStorage` — one sign-in per browser, then a **Déconnexion** button
+Sessions live in `localStorage` — one sign-in per browser, then a **Sign out** button
 appears at the bottom of `/new`.
 
 Three dashboard settings, all required:
