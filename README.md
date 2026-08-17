@@ -41,8 +41,10 @@ create table sonatlas_artists (
 -- works on a project created without it.
 alter table sonatlas_artists enable row level security;
 
+-- Both roles: `to anon` alone would return zero rows to a signed-in user,
+-- with no error. The insert would work, the list would look empty.
 create policy "public read" on sonatlas_artists
-  for select to anon using (true);
+  for select to anon, authenticated using (true);
 
 create policy "authenticated insert" on sonatlas_artists
   for insert to authenticated with check (true);
