@@ -1,6 +1,11 @@
 # SONATLAS
 
-Artist collection sorted by genre and subgenres. Nuxt 4 SPA, Supabase for storage.
+Artist collection sorted by genres and subgenres. Nuxt 4 SPA, Supabase for storage.
+
+An artist carries **several genres and several subgenres**. The subgenres offered on
+`/new` are the union of those of the selected genres; unselecting a genre drops the
+subgenres it was the only source of. On `/artists` the filters stay single-value —
+an artist matches if *any* of its genres is the selected one.
 
 | Route | |
 |---|---|
@@ -32,7 +37,7 @@ Copy `.env.example` to `.env`, then run in the Supabase SQL Editor:
 create table sonatlas_artists (
   id uuid primary key default gen_random_uuid(),
   name text not null,
-  genre text not null,
+  genres text[] not null default '{}',
   subgenres text[] not null default '{}',
   created_at timestamptz not null default now()
 );

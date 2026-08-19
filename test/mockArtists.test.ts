@@ -3,10 +3,13 @@ import { test } from 'node:test'
 import { GENRES } from '../app/constants/genres.ts'
 import { MOCK_ARTISTS } from '../app/constants/mockArtists.ts'
 
-test('every mock artist matches a genre and its subgenres', () => {
+test('every mock artist matches its genres and their subgenres', () => {
   for (const a of MOCK_ARTISTS) {
-    const subgenres = GENRES[a.genre]
-    assert.ok(subgenres, `unknown genre: ${a.genre}`)
-    for (const s of a.subgenres) assert.ok(subgenres.includes(s), `${a.genre} has no subgenre ${s}`)
+    assert.ok(a.genres.length, `${a.name} has no genre`)
+    for (const g of a.genres) assert.ok(GENRES[g], `unknown genre: ${g}`)
+    const allowed = a.genres.flatMap(g => GENRES[g] ?? [])
+    for (const s of a.subgenres) {
+      assert.ok(allowed.includes(s), `${a.name}: no genre of ${a.genres.join('/')} has subgenre ${s}`)
+    }
   }
 })

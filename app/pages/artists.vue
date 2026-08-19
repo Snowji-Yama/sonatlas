@@ -97,7 +97,10 @@ const pad = (n: number) => String(n).padStart(3, '0')
         <div class="grid">
           <span class="meta idx">{{ pad(i + 1) }}</span>
           <h2>{{ a.name }}</h2>
-          <span class="meta genre">{{ a.genre }}</span>
+          <!-- One genre per line: a separator ends up stranded alone when the column wraps -->
+          <span class="meta genre">
+            <span v-for="g in a.genres" :key="g">{{ g }}</span>
+          </span>
           <p v-if="a.subgenres?.length" class="meta subs">{{ a.subgenres.join(' · ') }}</p>
         </div>
       </li>
@@ -262,7 +265,17 @@ const pad = (n: number) => String(n).padStart(3, '0')
   word-break: break-word;
 }
 
-.genre { grid-column: 3; text-align: right; white-space: nowrap; color: var(--ink); }
+/* Each row is its own grid, so an auto column sizes to that row alone and the
+   left edge shifts from row to row. Fixed width = one shared edge.
+   16ch fits the longest genre name ("Experimental"); a longer one would wrap. */
+.genre {
+  grid-column: 3;
+  width: 16ch;
+  display: flex;
+  flex-direction: column;
+  color: var(--ink);
+}
+.genre > span { white-space: nowrap; }
 
 .subs {
   grid-column: 2 / -1;

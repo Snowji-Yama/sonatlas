@@ -3,7 +3,7 @@ import { MOCK_ARTISTS } from "~/constants/mockArtists";
 export type Artist = {
   id: string;
   name: string;
-  genre: string;
+  genres: string[];
   subgenres: string[];
 };
 
@@ -19,7 +19,7 @@ export function useArtists() {
       if (!c) return [...mockStore];
       const { data, error } = await c
         .from(TABLE)
-        .select("id, name, genre, subgenres");
+        .select("id, name, genres, subgenres");
       if (error) throw new Error(error.message);
       return data as Artist[];
     },

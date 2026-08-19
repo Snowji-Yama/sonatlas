@@ -30,29 +30,40 @@ async function requestLink() {
 }
 
 const name = ref('')
-const genre = ref('')
+const genres = ref<string[]>([])
 const subgenres = ref<string[]>([])
 const saving = ref(false)
 const error = ref('')
 
-const options = computed(() => (genre.value ? GENRES[genre.value] ?? [] : []))
-watch(genre, () => { subgenres.value = [] })
+// One block per selected genre, in GENRES order so the blocks do not reshuffle
+// with the order you clicked the genres in. No subgenre belongs to two genres,
+// so no block repeats a chip.
+const groups = computed(() =>
+  GENRE_NAMES.filter(g => genres.value.includes(g)).map(name => ({ name, subs: GENRES[name] ?? [] })),
+)
 
-function toggle(s: string) {
-  const i = subgenres.value.indexOf(s)
-  i === -1 ? subgenres.value.push(s) : subgenres.value.splice(i, 1)
+function toggle(list: string[], v: string) {
+  const i = list.indexOf(v)
+  i === -1 ? list.push(v) : list.splice(i, 1)
+}
+
+function toggleGenre(g: string) {
+  toggle(genres.value, g)
+  // Dropping a genre must drop the subgenres it was the only source of.
+  const allowed = groups.value.flatMap(x => x.subs)
+  subgenres.value = subgenres.value.filter(s => allowed.includes(s))
 }
 
 async function submit() {
   const trimmed = name.value.trim()
-  if (!trimmed || !genre.value) {
-    error.value = 'Name and main genre are required.'
+  if (!trimmed || !genres.value.length) {
+    error.value = 'Name and at least one genre are required.'
     return
   }
   saving.value = true
   error.value = ''
   try {
-    await addArtist({ name: trimmed, genre: genre.value, subgenres: [...subgenres.value] })
+    await addArtist({ name: trimmed, genres: [...genres.value], subgenres: [...subgenres.value] })
     await refreshNuxtData('artists')
     await navigateTo('/artists')
   } catch (e) {
@@ -113,27 +124,39 @@ async function submit() {
         <input v-model="name" type="text" required autocapitalize="words" placeholder="Band name">
       </label>
 
-      <label class="field">
-        <span class="meta">02 — Main genre</span>
-        <select v-model="genre" required>
-          <option value="" disabled>Choose</option>
-          <option v-for="g in GENRE_NAMES" :key="g" :value="g">{{ g }}</option>
-        </select>
-      </label>
+      <div class="field">
+        <span class="meta">02 — Genres<template v-if="genres.length"> ({{ genres.length }})</template></span>
+        <div class="chips">
+          <button
+            v-for="g in GENRE_NAMES"
+            :key="g"
+            type="button"
+            class="chip meta"
+            :class="{ on: genres.includes(g) }"
+            :aria-pressed="genres.includes(g)"
+            @click="toggleGenre(g)"
+          >{{ g }}</button>
+        </div>
+      </div>
 
       <div class="field">
         <span class="meta">03 — Subgenres<template v-if="subgenres.length"> ({{ subgenres.length }})</template></span>
-        <p v-if="!options.length" class="hint meta">Waiting for the main genre</p>
-        <div v-else class="chips">
-          <button
-            v-for="s in options"
-            :key="s"
-            type="button"
-            class="chip meta"
-            :class="{ on: subgenres.includes(s) }"
-            :aria-pressed="subgenres.includes(s)"
-            @click="toggle(s)"
-          >{{ s }}</button>
+        <p v-if="!groups.length" class="hint meta">Waiting for a genre</p>
+        <div v-else class="groups">
+          <div v-for="grp in groups" :key="grp.name">
+            <span class="meta group-label">{{ grp.name }}</span>
+            <div class="chips">
+              <button
+                v-for="s in grp.subs"
+                :key="s"
+                type="button"
+                class="chip meta"
+                :class="{ on: subgenres.includes(s) }"
+                :aria-pressed="subgenres.includes(s)"
+                @click="toggle(subgenres, s)"
+              >{{ s }}</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -220,6 +243,10 @@ async function submit() {
 .hint { padding: .6rem 0; opacity: .7; line-height: 1.7; text-transform: none; letter-spacing: .06em; }
 
 .chips { display: flex; flex-wrap: wrap; gap: .3rem; padding-top: .2rem; }
+
+/* one block per genre: without the label two chip rows just look like a wrap */
+.groups { display: flex; flex-direction: column; gap: .8rem; }
+.group-label { display: block; opacity: .55; }
 
 .chip {
   border: 1px solid var(--ink);
